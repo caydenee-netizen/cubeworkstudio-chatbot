@@ -11,7 +11,7 @@ PL.updCut10=function(opts){ opts=opts||{}; if(st.playing) return; st.playing=tru
 function bar(){ var b=$('#ubar10'); if(!b){ var a=$('#annc'); if(!a) return null; b=document.createElement('div'); b.id='ubar10'; b.className='ubar'; b.hidden=true; b.innerHTML='<span class="ubar-ic">◆</span><span class="ubar-t" id="ubar10T">Update 10 is coming to Cuber Tools</span><span class="ubar-c" id="ubar10C">--:--:--</span>'; a.parentNode.insertBefore(b,a.nextSibling); } return b; }
 function turnOn(){ if(st.on) return; st.on=true; document.documentElement.classList.add('upd10-on'); var l=st.cbs.slice(); st.cbs=[]; l.forEach(function(fn){ try{ fn(); }catch(e){ console.error(e); } }); }
 function sync(){
-  var u=(PL.live&&PL.live.upd&&PL.live.upd.v7)||PL.upd10; PL.upd10=u||{at:0,live:false,rel:0};
+  var u=(PL.live&&PL.live.upd&&PL.live.upd.v10)||PL.upd10; PL.upd10=u||{at:0,live:false,rel:0};
   if(PL.upd10.live&&PL.upd10.rel) LS('cw_upd10_live',String(PL.upd10.rel)); else if(!PL.upd10.live&&LS('cw_upd10_live')){ PL.upd10={at:0,live:true,rel:+LS('cw_upd10_live')||1}; }
   var b=bar(); if(!b) return; var s1=PL.upd9&&PL.upd9.live||LS('cw_upd9_live');
   var left=PL.upd10.at?PL.upd10.at-PL.now():0;
@@ -23,7 +23,7 @@ function sync(){
   if(PL.upd10.live){ if(!st.on&&LS('cw_upd10_seen')!==String(PL.upd10.rel)&&!st.playing&&!document.documentElement.classList.contains('ucut-on')){ PL.updCut10({onend:function(){ LS('cw_upd10_seen',String(PL.upd10.rel)); turnOn(); }}); } else if(!st.playing) turnOn(); }
   else if(PL.updOn10()) turnOn();
 }
-PL.updSync7=sync;
+PL.updSync10=sync;
 setInterval(function(){ if(!PL.upd10.live&&PL.upd10.at){ var left=PL.upd10.at-PL.now(), c=$('#ubar10C'); if(c) c.textContent=PL.updHMS(left); if(left<=0&&Date.now()-st.fast>1500){ st.fast=Date.now(); PL.poll(); } } },500);
 /* live countdown everyone watches together: the last 60 seconds take over the screen, confetti at zero */
 var LC={el:null,shut:false,fired:false,cf:null};

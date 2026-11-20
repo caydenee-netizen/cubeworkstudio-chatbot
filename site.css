@@ -298,3 +298,6 @@ button,.btn,.chipb,.seg,.themebtn,.fab,.fab *,.nav a,.cartbtn,canvas,[role=butto
 .sheet{z-index:9100}.toast{z-index:9200}
 .adv video{display:block;width:min(100%,380px);aspect-ratio:9/16;margin:0 auto;border-radius:22px;background:#000;box-shadow:0 18px 50px rgba(0,0,0,.25)}
 .adv video{display:block;width:min(100%,380px);aspect-ratio:9/16;margin:0 auto;border-radius:22px;background:#000;box-shadow:0 18px 50px rgba(0,0,0,.25)}
+
+/* phones: the floating buttons collapse to icons (like Cuber Tools) so they stop covering the product cards; the full label stays for screen readers */
+@media (max-width:700px){.fab{gap:8px}.fab a,.fab button{width:42px;height:42px;padding:0 0 0 12px;overflow:hidden;white-space:nowrap;word-spacing:40px;justify-content:flex-start;font-size:15px}}
