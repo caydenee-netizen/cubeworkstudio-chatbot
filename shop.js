@@ -391,7 +391,7 @@ function annBar(a){ var b=$('#annc'); if(!b) return; var gone=CW.ls('cw2_ann_x')
 /* ---------- owner ---------- */
 function crown(){ if(CW.ls('cw_owner_dev')!=='1'||document.getElementById('ownCrown')) return; var fab=document.querySelector('.fab'); if(!fab) return; var a=document.createElement('a'); a.id='ownCrown'; a.href='#owner'; a.textContent='👑 Owner'; a.style.background='#f2b600'; a.style.color='#111'; fab.insertBefore(a,fab.firstChild); }
 setTimeout(crown,0);
-function openConsole(){ var s=document.createElement('script'); s.src='/console.js?v=19'; s.onload=function(){ window.CWConsole&&CWConsole.open({products:function(){ return S.products; },base:BASE,colors:COLORS,state:state}); history.replaceState(null,'',location.pathname); app.__h=''; render(); }; document.head.appendChild(s); }
+function openConsole(){ var s=document.createElement('script'); s.src='/console.js?v=20'; s.onload=function(){ window.CWConsole&&CWConsole.open({products:function(){ return S.products; },base:BASE,colors:COLORS,state:state}); history.replaceState(null,'',location.pathname); app.__h=''; render(); }; document.head.appendChild(s); }
 
 /* ---------- boot ---------- */
 window.CWShop={P:P,state:state,refresh:function(){ CW.loadSite(); }};

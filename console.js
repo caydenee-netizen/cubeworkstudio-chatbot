@@ -219,7 +219,9 @@ async function onClick(e){
   if(a==='close'){ close(); return; }
   if(a==='lock'){ CW.ownerSignOut(); close(); CW.toast('Signed out on this device.'); return; }
   if(a==='psave'){ var x=cfgProd(id), nm=$('[data-f="name"][data-id="'+id+'"]',O.el).value.trim(), pr=$('[data-f="price"][data-id="'+id+'"]',O.el).value, sk=$('[data-f="stock"][data-id="'+id+'"]',O.el).value;
-    if(nm) x.name=nm; if(pr!=='') x.price=Math.max(0,Math.round(+pr)); x.stock=sk===''?'':Math.max(0,Math.round(+sk)); await publish(); return; }
+    pr=String(pr).replace(/^\s*RM\s*/i,'').replace(',','.').trim(); sk=String(sk).trim();
+    if(pr!==''&&!(isFinite(+pr)&&+pr>=0)){ CW.toast('Price must be a number, like 49.'); return; } if(sk!==''&&!(isFinite(+sk)&&+sk>=0)){ CW.toast('Stock must be a whole number, or empty for no limit.'); return; }
+    if(nm) x.name=nm; if(pr!=='') x.price=Math.round(+pr); x.stock=sk===''?'':Math.round(+sk); await publish(); return; }
   if(a==='pdel'){ O.cfg.deleted=(O.cfg.deleted||[]).concat([id]); O.cfg.products=O.cfg.products.filter(function(p){ return p.id!==id; }); await publish('Removed from the shop.'); return; }
   if(a==='presave'){ var o=$('[data-pf="open"][data-id="'+id+'"]',O.el).value, b=$('[data-pf="buy"][data-id="'+id+'"]',O.el).value; if(o&&b&&b<o){ CW.toast('The buy date has to be on or after the preorder date.'); return; }
     cfgProd(id).pre={on:true,open:o,buy:b}; await publish('Dates saved.'); return; }
