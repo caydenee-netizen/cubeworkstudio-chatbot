@@ -1,0 +1,52 @@
+/* Classic layout + clear Liquid Glass (like a sheet of glass / a drop of water) + light, fast surfaces.
+   Loaded after glass.css; only active with html.lg. No backdrop blur on cards so scrolling stays smooth on iPad. */
+html.lg,html.lg body{overscroll-behavior:none;overflow-x:hidden}
+html.lg{touch-action:manipulation;-webkit-tap-highlight-color:transparent;background:#eef1f7}
+html.lg[data-theme=dark]{background:#070a14}
+/* colourful background so the glass has something to show through */
+html.lg #lgbg{display:block!important;position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;contain:strict;transform:translateZ(0)}
+html.lg #lgbg i{display:block!important;position:absolute;border-radius:50%;filter:none!important;background:radial-gradient(circle,currentColor 0,currentColor 18%,transparent 70%)!important;opacity:.85;animation:clDrift 40s ease-in-out infinite alternate}
+html.lg #lgbg i:nth-child(1){left:-6%;top:-14%;width:58vw;height:58vw;color:#4f7dff}
+html.lg #lgbg i:nth-child(2){left:44%;top:6%;width:56vw;height:56vw;color:#2ed37a;animation-delay:-8s}
+html.lg #lgbg i:nth-child(3){left:70%;top:-22%;width:48vw;height:48vw;color:#a98bff;animation-delay:-16s}
+html.lg #lgbg i:nth-child(4){left:8%;top:52%;width:58vw;height:58vw;color:#ff6b5e;animation-delay:-4s}
+html.lg #lgbg i:nth-child(5){left:62%;top:58%;width:50vw;height:50vw;color:#ffc23d;animation-delay:-12s}
+html.lg[data-theme=dark] #lgbg i{opacity:.55}
+html.lg[data-theme=dark] #lgbg i:nth-child(1){color:#1d4fd8}html.lg[data-theme=dark] #lgbg i:nth-child(2){color:#1f9a52}html.lg[data-theme=dark] #lgbg i:nth-child(3){color:#7a5cff}html.lg[data-theme=dark] #lgbg i:nth-child(4){color:#c8352b}html.lg[data-theme=dark] #lgbg i:nth-child(5){color:#d79a00}
+html.lg #lgbg b{display:none!important}
+@keyframes clDrift{0%{transform:translate(0,0)}50%{transform:translate(5vw,4vh)}100%{transform:translate(-4vw,6vh)}}
+@media (prefers-reduced-motion:reduce){html.lg #lgbg i{animation:none}}
+/* clear glass surfaces */
+html.lg{--cl-g:radial-gradient(60% 40% at 18% 6%,rgba(255,255,255,.42),rgba(255,255,255,0) 70%),radial-gradient(40% 30% at 88% 100%,rgba(255,255,255,.2),rgba(255,255,255,0) 70%),linear-gradient(rgba(255,255,255,.06),rgba(255,255,255,.06));--cl-rim:inset 0 2px 1px #fff,inset 2px 0 1px rgba(255,255,255,.75),inset 0 -2px 2px rgba(255,255,255,.6),inset -2px 0 2px rgba(255,255,255,.45),inset 0 0 22px rgba(255,255,255,.22),inset 0 -16px 26px -20px rgba(30,40,80,.4),0 14px 32px rgba(30,40,80,.14);--cl-b:rgba(255,255,255,.85)}
+html.lg[data-theme=dark]{--cl-g:radial-gradient(60% 40% at 18% 6%,rgba(255,255,255,.14),rgba(255,255,255,0) 70%),radial-gradient(40% 30% at 88% 100%,rgba(255,255,255,.06),rgba(255,255,255,0) 70%),linear-gradient(rgba(255,255,255,.02),rgba(255,255,255,.02));--cl-rim:inset 0 2px 1px rgba(255,255,255,.6),inset 2px 0 1px rgba(255,255,255,.25),inset 0 -2px 2px rgba(255,255,255,.18),inset -2px 0 2px rgba(255,255,255,.12),inset 0 0 18px rgba(255,255,255,.05),inset 0 -14px 24px -18px rgba(0,0,0,.4),0 16px 36px rgba(0,0,0,.3);--cl-b:rgba(255,255,255,.3)}
+html.lg :is(#cl0,.tool,.pnl,.contbtn,.item,.du5-row,.cr5-card,.pc5,.top .wrap,.lgx,.lgf,.lgd,.toast,.chatp,.mail-ac,.own-top,.foot>.wrap,.h2-bar,.sheet .box){background:var(--cl-g)!important;background-size:auto!important;border:1px solid var(--cl-b)!important;box-shadow:var(--cl-rim)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html.lg .sheet .box{background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(244,246,251,.66))!important;-webkit-backdrop-filter:blur(20px) saturate(170%)!important;backdrop-filter:blur(20px) saturate(170%)!important}
+html.lg[data-theme=dark] .sheet .box{background:linear-gradient(180deg,rgba(26,30,44,.82),rgba(14,17,28,.76))!important}
+html.lg :is(#cl0,.chipb,.themebtn,.btn:not(.pri),.seg,.tag,.crumbs a,.fab a:not(.chat),.in,input[type=text],input[type=search],input[type=number],select,textarea){background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.06))!important;border:1px solid var(--cl-b)!important;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.9),inset 0 -1px 1px rgba(255,255,255,.4),0 6px 16px rgba(30,40,80,.1)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:var(--ink)}
+html.lg[data-theme=dark] :is(#cl0,.chipb,.themebtn,.btn:not(.pri),.seg,.tag,.crumbs a,.fab a:not(.chat),.in,input[type=text],input[type=search],input[type=number],select,textarea){background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.02))!important;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.4),0 6px 16px rgba(0,0,0,.25)!important}
+html.lg #h2Q{width:100%;max-width:440px;height:44px;padding:0 18px;border-radius:999px!important;font:500 15px Inter,system-ui,sans-serif;outline:none;margin-top:6px}
+html.lg .seg button:not([aria-pressed=true]){background:transparent!important;box-shadow:none!important;border:0!important}
+/* solid-colour buttons: glass with a little colour */
+html.lg :where(.btn.pri,.fab .chat,.fab .ask,.seg button[aria-pressed=true],.lseg button[aria-pressed=true],.cx-b,.lg-tab a[aria-current]){--tg:80,120,255}
+html.lg .fab .chat{--tg:160,110,255}html.lg .cx-F{--tg:31,170,90}html.lg .cx-B{--tg:40,95,235}html.lg .cx-R{--tg:235,60,48}html.lg .cx-L{--tg:255,128,30}html.lg .cx-U{--tg:235,235,240}html.lg .cx-D{--tg:245,200,0}html.lg .wheel-hub{--tg:242,182,0}
+html.lg :is(#cl0,.btn.pri,.fab .chat,.fab .ask,.seg button[aria-pressed=true],.lseg button[aria-pressed=true],.wheel-hub){background:linear-gradient(180deg,rgba(var(--tg),.34),rgba(var(--tg),.14))!important;border:1px solid rgba(255,255,255,.9)!important;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.9),inset 0 -1.5px 2px rgba(255,255,255,.35),inset 0 0 14px rgba(var(--tg),.25),0 8px 22px rgba(var(--tg),.22)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:#0d1020!important;text-shadow:none}
+html.lg[data-theme=dark] :is(#cl0,.btn.pri,.fab .chat,.fab .ask,.seg button[aria-pressed=true],.lseg button[aria-pressed=true],.wheel-hub){background:linear-gradient(180deg,rgba(var(--tg),.45),rgba(var(--tg),.2))!important;border-color:rgba(255,255,255,.5)!important;color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+html.lg :is(#cl0,.cx-b).cx-b.cx-b{background:linear-gradient(180deg,rgba(var(--tg),.7),rgba(var(--tg),.45))!important;border:1px solid rgba(255,255,255,.8)!important;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.8),0 6px 16px rgba(var(--tg),.25)!important;color:#0d1020!important}
+html.lg .wheel-hub{border:4px solid rgba(242,182,0,.9)!important}
+/* button motion (glassfx.js), fast */
+html.lg .glfx{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:-1}
+html.lg .glfx::before{content:"";position:absolute;left:var(--mx,50%);top:var(--my,50%);width:160px;height:160px;margin:-80px 0 0 -80px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.55),rgba(255,255,255,.18) 35%,rgba(255,255,255,0) 68%);opacity:0;transform:scale(.6);transition:opacity .12s,transform .18s cubic-bezier(.2,1.4,.4,1)}
+html.lg .glfx.lit::before{opacity:1;transform:scale(1)}
+html.lg .glfx .glr{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.5),rgba(255,255,255,.22) 45%,rgba(255,255,255,0) 70%);transform:scale(0);animation:glR .45s cubic-bezier(.2,.8,.3,1) forwards}
+html.lg .gl-down{transform:scale(.93)!important;transition:transform .06s ease-out!important}
+html.lg :is(#gl0,.gl-pop).gl-pop.gl-pop{animation:glPop .3s cubic-bezier(.3,1.5,.5,1)!important}
+html.lg :is(#gl0,.tool).tool.gl-down{transform:scale(.97)!important}
+html.lg :is(#gl0,.tool).tool.gl-pop.gl-pop{animation-name:glPopT!important}
+html.lg .lg-press{transform:none!important}
+/* no plain grey band at the bottom on iPad: the colourful background reaches past the screen edges (Safari's bars move as you scroll) */
+html.lg #lgbg{inset:auto!important;left:0!important;right:0!important;top:-20vh!important;height:140vh!important}
+html.lg #lgbg i{margin-top:20vh}
+/* no flicker: buttons don't fade their shadows or bounce twice (one press animation only, from glassfx.js) */
+html.lg :is(.tool,.item,.contbtn,.btn,.chipb,.themebtn,.fab a,.crumbs a,.seg button,.lgx,.lgf,.lgd){transition:none!important}
+html.lg :is(.btn,.chipb,.themebtn,.fab a,.crumbs a,.seg button,.tool,.item,.contbtn):active:not(.gl-down){transform:none!important}
+html.lg .glfx::before{transition:opacity .1s!important;transform:none!important}

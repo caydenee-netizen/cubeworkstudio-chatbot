@@ -1,0 +1,14 @@
+/* Cube Race: the ranked season panel. One season per month. Points come from real races (not practice or friendly rooms); tokens are paid out by rank when the month ends. */
+(function(){
+'use strict';
+if(typeof CW==='undefined'||!window.PL||!PL.views||!PL.views.race) return;
+var esc=CW.esc, ICON={Bronze:'🥉',Silver:'🥈',Gold:'🥇',Platinum:'💠',Diamond:'💎',Champion:'👑'};
+function html(d){ if(!d) return '<p class="muted" style="margin:0">Loading your rank…</p>'; if(d.err) return '<p class="muted" style="margin:0">'+esc(d.err)+'</p>';
+  var m=d.me, nx=m.next, pct=nx?Math.round((m.v-m.from)/(nx.at-m.from)*100):100, days=Math.max(0,Math.ceil((d.ends-Date.now())/86400000)), mon=new Date(d.season+'-15').toLocaleString('en-MY',{month:'long',year:'numeric'});
+  return '<div class="rk-top"><div class="rk-me"><i>'+(ICON[m.tier]||'🏁')+'</i><div><b>'+m.tier+'</b><small>'+m.v+' points'+(m.rank?' · #'+m.rank+' of '+d.n:'')+' · '+m.w+' wins in '+m.g+' races</small></div></div><span class="chipb">'+mon+' · '+days+' day'+(days===1?'':'s')+' left</span></div>'
+   +'<div class="rk-bar"><u style="width:'+Math.max(2,Math.min(100,pct))+'%"></u></div><p class="muted" style="font-size:13px;margin:6px 0 10px">'+(nx?(nx.at-m.v)+' more points to '+nx.n:'Top rank reached')+'. Win +25 · 2nd +10 · 3rd +5 · lower places lose a few.</p>'
+   +'<details class="rk-d"><summary>Top 10 and season rewards</summary>'+(d.top.length?d.top.map(function(r){ return '<div class="rk-row'+(r.me?' me':'')+'"><i>'+r.r+'</i><b>'+esc(r.n)+'</b><span>'+(ICON[r.tier]||'')+' '+r.v+'</span></div>'; }).join(''):'<p class="muted">No ranked races yet this season.</p>')
+   +'<div class="rk-pay">'+d.tiers.map(function(t){ return '<span><i>'+(ICON[t.n]||'')+'</i><b>'+t.n+'</b><small>'+t.at+'+ pts</small><small>🪙 '+t.pay+'</small></span>'; }).join('')+'</div>'+(d.last&&d.last.top&&d.last.top.length?'<p class="muted" style="font-size:13px;margin:8px 0 0">Last season: '+d.last.top.map(function(t,i){ return ['🥇','🥈','🥉'][i]+' '+esc(t.n)+' ('+t.v+')'; }).join(' · ')+'</p>':'')+'</details>'; }
+async function load(box){ var r=await CW.call('/api/rk',{id:CW.devId()},8000); if(!box.isConnected) return; box.innerHTML='<h3 style="margin:0 0 10px">🏆 Ranked season</h3>'+html(r.ok&&r.data&&r.data.ok?r.data:{err:'Ranked seasons need a connection.'}); }
+var s0=PL.views.race.show; PL.views.race.show=function(el){ var r=s0.apply(this,arguments); try{ var w=el.querySelector('.wrap')||el; if(!el.querySelector('#rkBox')){ var box=document.createElement('div'); box.className='pnl rk'; box.id='rkBox'; box.innerHTML='<h3 style="margin:0 0 10px">🏆 Ranked season</h3>'+html(null); var cr=w.querySelector('.crumbs'); if(cr&&cr.nextSibling) w.insertBefore(box,cr.nextSibling); else w.insertBefore(box,w.firstChild); load(box); } }catch(e){} return r; };
+})();
