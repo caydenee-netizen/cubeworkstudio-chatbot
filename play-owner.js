@@ -72,7 +72,7 @@ var LENS=[['s','Short'],['n','Normal'],['l','Long']];
 function draw(){ if(!O.el) return; O.el.querySelectorAll('#oT [data-t]').forEach(function(b){ b.setAttribute('aria-pressed',b.getAttribute('data-t')===O.tab); });
   var B=$('#oB',O.el), h='', n=PL.now(), ev=PL.raceEvent();
   if(O.tab==='live'){ var T=LV.tour, S=O.sched, U=O.users;
-    h+='<p class="muted" style="margin-bottom:12px">'+(U?U.users.length+' online · '+U.rooms.filter(function(r){ return r.status!=='done'; }).length+' races running':'Loading…')+'</p><div class="grid2"><div>';
+    h+='<p class="muted" style="margin-bottom:12px">'+(U&&U.users&&U.rooms?U.users.length+' online · '+U.rooms.filter(function(r){ return r.status!=='done'; }).length+' races running':'Loading…')+'</p><div class="grid2"><div>';
     h+=sec('Cube Race',ev?'A race is open for '+PL.mmss(ev.exp-n)+' more ('+esc(ev.by||'')+').':'Auto races still open every 30 minutes on their own.')
       +(ev?'<button class="btn" data-o="end">Close the race</button>':'<div class="row">'+prizes('oPz')+sel('oLen',LENS,'120px')+'</div><button class="btn pri" data-o="race" style="margin-top:8px">Start a race now</button>')+'</div>';
     h+=sec('Tournament',T&&T.st!=='done'?'Running: '+T.st+' · '+T.n+' racers':'Heats of 10, top 3 of each heat race the final.')

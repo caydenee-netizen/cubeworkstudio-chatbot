@@ -1444,3 +1444,8 @@ html body #app .h2-bar{background:none!important;border-color:transparent!import
  html body .pl-top #hLv{max-width:104px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
  html body .pl-top .pl-chips>*{flex:none}
 }
+/* small phones: the level/name chip gives up space (with …) so the theme button stays on screen */
+@media (max-width:430px){
+ html body .pl-top .pl-chips{flex:1 1 auto;justify-content:flex-end}
+ html body .pl-top .pl-chips>#hLv{flex:0 1 auto;min-width:44px}
+}

@@ -38,9 +38,9 @@ async function joinEvent(id){ if(!LV.on) await PL.poll();
   if(!r.ok){ CW.toast(r.status===410?'That race has already closed.':errOf(r,'Could not join the race.')); return; }
   enter(r.data.room); }
 async function privMake(){ var r=await CW.call('/api/race/priv/create',{id:me(),name:PL.name(),car:carVal(),len:ls('cw2_rlen')||'n',open:!($('#rFo')&&$('#rFo').checked),team:!!($('#rTm')&&$('#rTm').checked)},8000);
-  if(!r.ok){ CW.toast(errOf(r)); return; } enter(r.data.room); return r.data.room; }
+  if(!r.ok){ CW.toast(errOf(r)); return; } if(!r.data||!r.data.room){ CW.toast('Could not open the room. Try again.'); return; } enter(r.data.room); return r.data.room; }
 async function privJoin(code){ code=String(code||'').toUpperCase().replace(/[^A-Z0-9]/g,''); if(code.length!==5){ CW.toast('Room codes have 5 letters or numbers.'); return; }
-  var r=await CW.call('/api/race/priv/join',{id:me(),name:PL.name(),code:code,car:carVal()},8000); if(!r.ok){ CW.toast(errOf(r)); return; } enter(r.data.room); }
+  var r=await CW.call('/api/race/priv/join',{id:me(),name:PL.name(),code:code,car:carVal()},8000); if(!r.ok){ CW.toast(errOf(r)); return; } if(!r.data||!r.data.room){ CW.toast('Could not open the room. Try again.'); return; } enter(r.data.room); }
 PL.raceEnter=function(room){ enter(room); };
 function enter(room){ R.practice=null; LV.roomId=room.id; R.doneTries=0; kill(); overlay(); R.update(room); PL.poll(); }
 function practice(o){ var now=Date.now(), names=['Nova','Kiro','Bolt','Echo','Zed'].slice(0,2+Math.floor(Math.random()*3));

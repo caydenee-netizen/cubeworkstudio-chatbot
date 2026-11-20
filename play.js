@@ -232,7 +232,7 @@ function fmtT(ms){ ms=Math.max(0,Math.round(ms)); var m=Math.floor(ms/60000), s=
 function fmt(ms){ if(ms==null) return '–'; if(ms===Infinity) return 'DNF'; ms=Math.round(ms); var s=ms/1000, m=Math.floor(s/60); return m?m+':'+(s-m*60).toFixed(2).padStart(5,'0'):s.toFixed(2); }
 PL.fmt=fmt;
 PL.T={data:tData,save:tSave,scramble:scramble,CUBES:CUBES,fmt:fmt,fmtT:fmtT,cubeState:cubeState,FC:FC,ao:aoN,best:best};
-function aoN(L,n){ if(L.length<n) return null; var a=L.slice(-n).map(function(x){ return x.p===2?Infinity:x.t+(x.p===1?2000:0); }).sort(function(a,b){ return a-b; }); a=a.slice(1,-1); if(a.some(function(x){ return x===Infinity; })) return Infinity; return a.reduce(function(s,x){ return s+x; },0)/a.length; }
+function aoN(L,n){ if(L.length<n) return null; var a=L.slice(-n).map(function(x){ return x.p===2?Infinity:x.t+(x.p===1?2000:0); }).sort(function(a,b){ return a-b; }); var cut=Math.max(1,Math.ceil(n*.05)); a=a.slice(cut,n-cut); if(a.some(function(x){ return x===Infinity; })) return Infinity; return a.reduce(function(s,x){ return s+x; },0)/a.length; }
 function best(L){ var b=null; L.forEach(function(x){ if(x.p===2) return; var t=x.t+(x.p===1?2000:0); if(b==null||t<b) b=t; }); return b; }
 function bestAo5(L){ var b=null; for(var i=5;i<=L.length;i++){ var a=aoN(L.slice(0,i),5); if(a!=null&&a!==Infinity&&(b==null||a<b)) b=a; } return b; }
 PL.T.aoN=aoN; PL.T.best=best; PL.T.bestAo5=bestAo5; PL.T.editSolve=function(i){ editSolve(i); }; PL.T.stats=function(){ stats(); };

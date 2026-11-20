@@ -325,11 +325,12 @@ async function orderAfter(code,token,status){
   var r=await CW.call('/api/order/view',{code:code,token:token,check:true},12000);
   if(!$('#ordP')) return;
   if(!r.ok){ box.innerHTML=r.status===404?'<h2 style="font-size:26px">Order not found</h2><p class="muted" style="margin-top:8px">Check the link in your email, or find it on <a href="#track">Track order</a>.</p>':'<p class="msg bad">Could not load your order. Check your connection.</p><button class="btn sm" type="button" onclick="location.reload()">Retry</button>'; return; }
-  var o=r.data.order; rememberOrder({code:o.code,token:token,total:o.total});
+  var o=r.data&&r.data.order; if(!o||!Array.isArray(o.steps)||!o.pay||!Array.isArray(o.items)||!o.addr){ box.innerHTML='<p class="msg bad">Could not load your order. Try again in a moment.</p><button class="btn sm" type="button" onclick="location.reload()">Retry</button>'; return; }
+  rememberOrder({code:o.code,token:token,total:o.total});
   var at=o.steps.indexOf(o.status), paid=o.pay.paid;
-  var h='<div class="eyebrow">Order '+esc(o.code)+'</div><h2 style="font-size:30px;margin-top:6px">'+(o.cancelled?'Cancelled':!paid?(o.pay.method==='toyyib'?(status==='3'?'Payment didn’t go through':'Waiting for payment'):'Pay with Touch ’n Go'):o.status==='Delivered'?'Delivered':'Thank you, '+esc(o.name.split(' ')[0])+'!')+'</h2>';
+  var h='<div class="eyebrow">Order '+esc(o.code)+'</div><h2 style="font-size:30px;margin-top:6px">'+(o.cancelled?'Cancelled':!paid?(o.pay.method==='toyyib'?(status==='3'?'Payment didn’t go through':'Waiting for payment'):'Pay with Touch ’n Go'):o.status==='Delivered'?'Delivered':'Thank you'+(o.name?', '+esc(String(o.name).split(' ')[0]):'')+'!')+'</h2>';
   if(!paid&&!o.cancelled){
-    if(o.pay.method==='toyyib') h+='<p class="muted" style="margin-top:8px">'+(status==='3'?'Your bank didn’t complete the payment. You weren’t charged.':'If you just paid, this updates on its own in a few seconds.')+'</p>';
+    if(o.pay.method==='toyyib') h+='<p class="muted" style="margin-top:8px">'+(status==='3'?'Your bank didn’t complete the payment. You weren’t charged. <a href="https://wa.me/'+CW.WA+'?text='+encodeURIComponent('Hi! My payment for order '+o.code+' didn’t go through.')+'" target="_blank" rel="noopener">WhatsApp us</a> and we’ll help you pay.':'If you just paid, this updates on its own in a few seconds.')+'</p>';
     else h+='<p class="muted" style="margin-top:8px">Send exactly this amount, then enter the transaction ID from your TNG app.</p><div class="big">RM '+money(o.total)+'</div>'
       +'<div class="copy"><span>+60 18-296 7670 · TNG</span><button class="btn sm" type="button" data-cp="0182967670">Copy number</button></div>'
       +'<div class="copy"><span>RM '+money(o.total)+'</span><button class="btn sm" type="button" data-cp="'+money(o.total)+'">Copy amount</button></div>'
@@ -345,7 +346,9 @@ async function orderAfter(code,token,status){
     +'<div><span>Shipping'+(o.courier?' · '+esc(o.courier):'')+'</span><b>'+(o.ship?'RM '+money(o.ship):'Free')+'</b></div><div class="tot"><span>Total</span><b>RM '+money(o.total)+'</b></div></div>'
     +'<p class="note">Ship to: '+esc([o.addr.l1,o.addr.l2,o.addr.pc+' '+o.addr.city,o.addr.state].filter(Boolean).join(', '))+'</p>'
     +'<p class="note">Questions? <a href="https://wa.me/'+CW.WA+'?text='+encodeURIComponent('Hi! About my order '+o.code)+'" target="_blank" rel="noopener">WhatsApp us</a> with your order number. Bookmark this page to check on it any time.</p>';
+  var oldR=$('#tngR'), keep=oldR?oldR.value:'', foc=oldR&&document.activeElement===oldR;
   box.innerHTML=h;
+  var newR=$('#tngR'); if(newR&&keep){ newR.value=keep; if(foc){ newR.focus(); try{ newR.setSelectionRange(keep.length,keep.length); }catch(e){} } }
   box.onclick=function(e){ var cp=e.target.closest('[data-cp]'); if(cp) CW.copy(cp.getAttribute('data-cp'),cp); };
   var oa=$('#oAl'); if(oa) oa.onclick=async function(){ var m=$('#oAlM'), on=CW.ls('cw_oal_'+code)==='1'; oa.disabled=true; if(m) m.textContent='';
     if(on){ await CW.call('/api/order/alert',{code:code,token:token,id:CW.devId(),on:false},8000); CW.ls('cw_oal_'+code,null); }

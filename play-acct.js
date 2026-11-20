@@ -11,9 +11,14 @@ function snapshot(){ var o={}; try{ for(var i=0;i<localStorage.length;i++){ var 
 function restore(txt){ var o; try{ o=JSON.parse(txt||'{}'); }catch(e){ return false; }
   try{ var del=[]; for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(/^cw_/.test(k)&&!SKIP.test(k)) del.push(k); } del.forEach(function(k){ localStorage.removeItem(k); });
     Object.keys(o).forEach(function(k){ if(/^cw_/.test(k)&&!SKIP.test(k)&&typeof o[k]==='string') localStorage.setItem(k,o[k]); }); }catch(e){ return false; } return true; }
+/* very large saves (thousands of timer solves): keep every time, but only the newest scrambles go to the cloud copy */
+function slim(snap){ try{ var o=JSON.parse(snap), t=o.cw_timer&&JSON.parse(o.cw_timer); if(!t||!t.solves) return snap;
+  Object.keys(t.solves).forEach(function(k){ var L=t.solves[k]; if(!Array.isArray(L)) return; for(var i=0;i<L.length-300;i++) if(L[i]&&L[i].scr) delete L[i].scr; });
+  o.cw_timer=JSON.stringify(t); return JSON.stringify(o); }catch(e){ return snap; } }
 function hash(s){ var h=5381; for(var i=0;i<s.length;i++) h=((h<<5)+h+s.charCodeAt(i))|0; return h+':'+s.length; }
 var busy=false;
-async function sync(force){ var a=acct(); if(!a||busy) return; var snap=snapshot(), h=hash(snap); if(!force&&localStorage.getItem('cw_acct_h')===h) return; if(snap.length>220000) return;
+async function sync(force){ var a=acct(); if(!a||busy) return; var snap=snapshot(), h=hash(snap); if(!force&&localStorage.getItem('cw_acct_h')===h) return; if(snap.length>220000) snap=slim(snap);
+  if(snap.length>220000){ try{ if(!sessionStorage.getItem('cw_acct_big')){ sessionStorage.setItem('cw_acct_big','1'); CW.toast('Your Cuber Tools data is too big to back up to your account. It is still saved on this device.'); } }catch(e){} return; }
   busy=true; var r=await CW.call('/api/acct/save',{tok:a.tok,data:snap},12000); busy=false;
   if(r.ok){ try{ localStorage.setItem('cw_acct_h',h); localStorage.setItem('cw_acct_t',String(Date.now())); }catch(e){} }
   else if(r.status===401){ setAcct(null); } return r.ok; }
